@@ -4,6 +4,12 @@
 import sys
 from PyQt4 import QtGui
 
+buttons = {}
+
+app = QtGui.QApplication(sys.argv)
+widget = QtGui.QWidget()
+layout = QtGui.QGridLayout()
+
 def hello():
     print("Hello, World!")
 
@@ -20,20 +26,25 @@ class Example(QtGui.QWidget):
         
         self.setToolTip('This is a <b>QWidget</b> widget')
 
-        btn = QtGui.QPushButton('Button', self)
-        btn.clicked.connect(hello)
-        btn.setToolTip('Click for a greeting!')
-        btn.resize(btn.sizeHint())
+        for j in range(10):
+            # keep a reference to the buttons
+            #j, 1 is a kludge for not knowing horzn. formatting for Qt, yet:
+            buttons[(j, 1)] = QtGui.QPushButton('Button %d' % j, self)
+            buttons[(j, 1)].clicked.connect(hello)
+            buttons[(j, 1)].setToolTip('Click for a greeting!')
+            buttons[(j, 1)].resize(buttons[(j, 1)].sizeHint())
+            # add to the layout
+            layout.addWidget(buttons[(j, 1)], j, 1)
+
         
-        self.setGeometry(300, 300, 250, 150)
-        self.setWindowTitle('PyRSS')
-        self.setWindowIcon(QtGui.QIcon('PyRSS_logo.png'))        
+        widget.setGeometry(300, 300, 250, 15)
+        widget.setWindowTitle('PyRSS')
+        widget.setWindowIcon(QtGui.QIcon('logo.png'))        
     
-        self.show()
+        widget.show()
 
 def main():
-    
-    app = QtGui.QApplication(sys.argv)
+    widget.setLayout(layout)
     ex = Example()
     sys.exit(app.exec_())
 
